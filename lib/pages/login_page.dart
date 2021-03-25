@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_catalog/utils/routes.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String name = "";
+  bool changeButton = false;
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -18,7 +25,7 @@ class LoginPage extends StatelessWidget {
                 width: 10,
               ),
               Text(
-                "Welcome",
+                "Welcome $name",
                 style: TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
@@ -34,6 +41,10 @@ class LoginPage extends StatelessWidget {
                         hintText: "Enter UserName",
                         labelText: "UserName",
                       ),
+                      onChanged: (value) {
+                        name = value;
+                        setState(() {});
+                      },
                     ),
                     SizedBox(
                       height: 30,
@@ -50,16 +61,49 @@ class LoginPage extends StatelessWidget {
                       height: 40,
                       width: 20,
                     ),
-                    ElevatedButton(
-                      child: Text("Login"),
-                      style: TextButton.styleFrom(
-                        minimumSize: Size(150, 50),
-                      ),
-                      onPressed: () {
-                        print("Hi button is pressed");
+                    InkWell(
+                      onTap: () async {
+                        setState(() {
+                          changeButton = true;
+                        });
+                        await Future.delayed(Duration(seconds: 1));
                         Navigator.pushNamed(context, MyRoutes.homeRoute);
+                        //used to convert a container to work like a button
                       },
+                      child: AnimatedContainer(
+                        duration: Duration(seconds: 1),
+                        decoration: BoxDecoration(
+                            color: Colors.purple,
+                            // shape: changeButton
+                            //     ? BoxShape.circle,
+                            //     : BoxShape.rectangle,
+                            borderRadius:
+                                BorderRadius.circular(changeButton ? 50 : 8)),
+                        height: 50,
+                        width: changeButton ? 50 : 200,
+                        alignment: Alignment.center,
+                        child: changeButton
+                            ? Icon(Icons.done)
+                            : Text(
+                                "LOGIN",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                ),
+                              ),
+                      ),
                     ),
+                    // ElevatedButton(
+                    //   child: Text("Login"),
+                    //   style: TextButton.styleFrom(
+                    //     minimumSize: Size(150, 50),
+                    //   ),
+                    //   onPressed: () {
+                    //     print("Hi button is pressed");
+                    //     Navigator.pushNamed(context, MyRoutes.homeRoute);
+                    //   },
+                    // ),
                   ],
                 ),
               ),
